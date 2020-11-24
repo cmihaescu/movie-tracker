@@ -2,9 +2,12 @@ import React from 'react';
 import { useParams, useHistory, Link as RouterLink } from 'react-router-dom';
 import {
   Box,
+  Image,
   Input,
+  HStack,
   IconButton,
   UnorderedList,
+  List,
   ListItem,
   Container,
   Link,
@@ -13,8 +16,8 @@ import {
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import useFetch from '../hooks/useFetchEffect';
-import { searchMovie } from '../connectors/tmdb';
-import { getYear, STATUS } from '../utils';
+import { searchMovie,getImage, imageFallback } from '../connectors/tmdb';
+import { getData, getYear, getOverview, STATUS } from '../utils';
 
 export default function Search() {
   const { terms } = useParams();
@@ -50,14 +53,53 @@ export default function Search() {
         </Text>
       )}
       {status === STATUS.RESOLVED && (
-        <UnorderedList>
-          {data.results.map(({ id, title, release_date }) => (
+        <UnorderedList spacing={3} listStyleType={"none"}>
+          {data.results.map(({ id, title, release_date, popularity ,vote_average, vote_count, poster_path, overview}) => (
             <ListItem key={id}>
               <Link as={RouterLink} to={`/movies/${id}`}>
-                <Text as="span">{title} </Text>
-                <Text as="span" color="GrayText">
-                  {getYear(release_date)}
-                </Text>
+                <HStack spacing={3} align="flex-start">
+                  <Box>
+                    <Image
+                      src={getImage(poster_path, 'w300')}
+                      alt="Poster"
+                      w="35vw"
+                      maxW={200}
+                      fallbackSrc={imageFallback}
+                    />
+                  </Box>
+                  <Box>
+                    <List spacing={3}>
+                      <ListItem>
+                        <Text as="span" fontWeight="700">{title} </Text>
+                      </ListItem>
+                      <ListItem>
+                        <Text as="span" color="GrayText">
+                          Release date: {getYear(release_date)},
+                        </Text>
+                      </ListItem>
+                      <ListItem>
+                        <Text as="span" color="GrayText">
+                          Popularity: {getData(popularity)},
+                        </Text>                        
+                      </ListItem>
+                      <ListItem>
+                        <Text as="span" color="GrayText">
+                          Rating: {getData(vote_average)}/10,                      
+                        </Text>
+                      </ListItem>
+                      <ListItem>
+                        <Text as="span" color="GrayText">
+                          Vote Count: {getData(vote_count)},                  
+                        </Text>                        
+                      </ListItem>
+                      <ListItem>
+                        <Text as="span" color="GrayText">
+                          Movie Plot: {getOverview(overview)}...                      
+                        </Text>              
+                      </ListItem>
+                    </List>
+                  </Box>
+                </HStack>
               </Link>
             </ListItem>
           ))}

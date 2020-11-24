@@ -3,6 +3,16 @@ export const getYear = date => {
   return date.substr(0, 4);
 };
 
+export const getData = (data) => {
+  if (!data) return 'N/A';
+  return data;
+};
+
+export const getOverview = (data) => {
+  if (!data) return 'N/A';
+  return data.substr(0, 100);
+};
+
 export const STATUS = {
   IDLE: 'idle',
   PENDING: 'pending',
