@@ -10,19 +10,21 @@ import {
   Heading,
   IconButton,
 } from '@chakra-ui/react';
-import { ChevronLeftIcon, AddIcon, CheckIcon } from '@chakra-ui/icons';
+import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { useParams, useHistory } from 'react-router-dom';
 import useMovie from '../hooks/useMovie';
 import { getImage, imageFallback } from '../connectors/tmdb';
 import { getYear, STATUS } from '../utils';
 import WatchlistButton from '../components/WatchlistButton';
+import AddToHistoryButton from '../components/AddToHistoryButton';
+
 
 export default function Movie() {
   const { movieId } = useParams();
   const history = useHistory();
-  const [isHistoryActive, setHistoryActive] = React.useState(false); // temp state, for UI only, should be removed when implemented properly
+  ; // temp state, for UI only, should be removed when implemented properly
 
-  const { movie, status, error, updateStatus, updateMovie } = useMovie(movieId);
+  const { movie, status, error, updateStatus, updateMovie, updateWatchedMovie, updateWatchedStatus } = useMovie(movieId);
 
   if (status === STATUS.IDLE) {
     return null;
@@ -56,14 +58,9 @@ export default function Movie() {
           onClick={history.goBack}
         />
         <HStack>
-          <WatchlistButton movie={movie} status={updateStatus} update={updateMovie} />
-          <IconButton
-            aria-label={isHistoryActive ? 'Remove from history' : 'Mark as watched'}
-            icon={isHistoryActive ? <CheckIcon /> : <AddIcon />}
-            colorScheme="teal"
-            variant={isHistoryActive ? 'solid' : 'outline'}
-            onClick={() => setHistoryActive(a => !a)}
-          />
+        <WatchlistButton movie={movie} status={updateStatus} update={updateMovie} />
+        <AddToHistoryButton movie={movie} status={updateWatchedStatus} update={updateWatchedMovie} />
+          
         </HStack>
       </HStack>
       <HStack spacing={3} align="flex-start">

@@ -19,8 +19,6 @@ client
   .then(() => console.log('MongoDB Connected'))
   .catch(error => console.error('Error on connecting to MongoDB server', error))
   .then(() => {
-    const watchlist = client.db(CONFIG.DB).collection('watchlist');
-    const history = client.db(CONFIG.DB).collection('History');
-    module.exports.watchlist = watchlist;
-    module.exports.history = history;
+    const movies = client.db(CONFIG.DB).collection('movies');
+    module.exports.movies = movies;
   });

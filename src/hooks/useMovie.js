@@ -40,7 +40,7 @@ export default function useMovie(movieId) {
       });
   }, [movieId]);
 
-  // define am update method
+  // define an update method
   const [updateStatus, setUpdateStatus] = React.useState(STATUS.IDLE);
   const updateMovie = React.useCallback(
     body => {
@@ -65,5 +65,30 @@ export default function useMovie(movieId) {
     [movieId],
   );
 
-  return { movie, status, error, updateStatus, updateMovie }; // Bad naming example: updateStatus is an enum, but updateMovie is a function
+  // define an add to history method
+  const [updateWatchedStatus, setUpdateWatchedStatus] = React.useState(STATUS.IDLE);
+  const updateWatchedMovie = React.useCallback(
+    body => {
+      setUpdateWatchedStatus(STATUS.PENDING);
+
+      fetch(`${MOVIES_URL}/${movieId}`, generateConfig('PUT', body))
+        .then(data => {
+          if (data.status >= 300) {
+            throw new Error(`Fetch failed with status ${data.status}`);
+          }
+          return data.json();
+        })
+        .then(data => {
+          setMovie(data);
+          setUpdateWatchedStatus(STATUS.RESOLVED);
+        })
+        .catch(err => {
+          setError(err.message);
+          setUpdateWatchedStatus(STATUS.REJECTED);
+        });
+    },
+    [movieId],
+  );
+
+  return { movie, status, error, updateStatus, updateMovie, updateWatchedMovie, updateWatchedStatus }; // Bad naming example: updateStatus is an enum, but updateMovie is a function
 }
