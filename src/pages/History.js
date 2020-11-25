@@ -3,6 +3,7 @@ import {
   Text,
   Image,
   CircularProgress,
+  Heading,
   Center,
   Container,
   Box,
@@ -18,7 +19,6 @@ import { STATUS } from '../utils';
 
 export default function History() {
   const { status, data: movies, error } = useFetchEffect(`${HISTORY_URL}`);
-
   if (status === STATUS.IDLE) {
     return null;
   }
@@ -38,26 +38,29 @@ export default function History() {
   }
 
   return (
-    // <Text textAlign="center" mt={3}>
-    //   History page
-    // </Text>
     <Container p={3} maxW="80em">
+
+    <Heading  textAlign="center" mt={3} p={6}>
+      Here are the movies you have watched so far
+    </Heading >
     <SimpleGrid minChildWidth={150} spacing={3}>
       {movies.map(movie => (
-        <Box as={Link} to={`/movies/${movie.id}`} key={movie.id} pos="relative" noOfLines={2}>
-          <Badge variant="solid" colorScheme="teal" pos="absolute" top={1} right={1}>
-            {movie.vote_average}
-          </Badge>
+        <Box as={Link} to={`/movies/${movie.id}`} key={movie.id} noOfLines={2} maxW="300px">
           <Tooltip label={movie.title}>
-            <Image
+            <Image               
               src={getImage(movie.poster_path, 'w300')}
               alt="Poster"
               fallbackSrc={imageFallback}
             />
           </Tooltip>
-          <Text>{movie.title}</Text>
+          <Text pos="relative">
+            {movie.title}
+            <Badge variant="solid" colorScheme="teal" pos="absolute" top={-6} right={1}>
+              {movie.vote_average}/10
+            </Badge>
+          </Text>
         </Box>
-      ))}
+      )).sort(movies.watchedDate)}
     </SimpleGrid>
   </Container>
   );

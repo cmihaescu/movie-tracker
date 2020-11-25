@@ -1,14 +1,19 @@
 import React from 'react';
+import DatePicker from 'react-date-picker';
 import {
   Text,
   Image,
   CircularProgress,
   Center,
+  Link,
+  ListItem,
+  List,
   Container,
   Box,
   HStack,
   Heading,
   IconButton,
+  Badge,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { useParams, useHistory } from 'react-router-dom';
@@ -22,9 +27,19 @@ import AddToHistoryButton from '../components/AddToHistoryButton';
 export default function Movie() {
   const { movieId } = useParams();
   const history = useHistory();
-  ; // temp state, for UI only, should be removed when implemented properly
-
+  const [chosenWatchedDate, setWatchedDateManually] = React.useState(new Date());
   const { movie, status, error, updateStatus, updateMovie, updateWatchedMovie, updateWatchedStatus } = useMovie(movieId);
+
+  React.useEffect(() => {
+    updateDate();
+  }, [chosenWatchedDate]);
+
+   const updateDate  =  ()   => {
+    updateWatchedMovie({
+      ...movie,
+       watchedDate: chosenWatchedDate.toLocaleDateString()
+    })
+  }
 
   if (status === STATUS.IDLE) {
     return null;
@@ -46,6 +61,7 @@ export default function Movie() {
     );
   }
 
+ 
   return (
     <Container p={3} maxW="80em">
       <HStack mb={3} justify="space-between">
@@ -75,12 +91,47 @@ export default function Movie() {
         </Box>
         <Box w="100%">
           <HStack justify="space-between">
-            <Heading as="h2">{movie.title}</Heading>
+            <Heading as="h2">{movie.title} </Heading>
+            <Text as="span" color="GrayText">{movie.runtime} minutes</Text>
             <Text as="span" color="GrayText">
               {getYear(movie.release_date)}
             </Text>
           </HStack>
-          <Text>{movie.overview}</Text>
+          <Box>
+            <List spacing={3}>
+              <ListItem paddingTop="5px">
+                <Text as="span" color="GrayText">Genre: {movie.genres.map(a => a.name + " | ")} Rating {movie.vote_average}/10</Text>
+
+              </ListItem>
+              <ListItem>
+                <Text>{movie.overview}</Text>
+                
+              </ListItem>
+              <ListItem>
+                <Text>Catchphrase: {movie.tagline}</Text>
+                
+              </ListItem>
+              <ListItem>
+                <Text><Link href={`${movie.homepage}`} isExternal>Link to Movie Homepage</Link> </Text>
+                
+              </ListItem>
+              <ListItem>
+                <Text><Link href={`https://www.imdb.com/title//${movie.imdb_id}/`} isExternal>Link to IMDB</Link> </Text>
+
+              </ListItem>
+              <ListItem>
+                <Text>{movie.watchedDate==="removed" || !movie.watchedDate ? "" : `Watched on ${movie.watchedDate}`}</Text>                
+              </ListItem>
+              <ListItem>
+                <Text paddingBottom="5px" visibility = {movie.watchedDate==="removed" || !movie.watchedDate ? "hidden" : "visible"}> Watched date not correct? Choose correct Date from here: 
+                  <DatePicker
+                  onChange={setWatchedDateManually}
+                  value={chosenWatchedDate}
+                  />
+                </Text>
+              </ListItem>            
+            </List>
+            </Box>
         </Box>
       </HStack>
     </Container>

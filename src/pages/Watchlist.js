@@ -9,6 +9,7 @@ import {
   SimpleGrid,
   Badge,
   Tooltip,
+  Heading
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import useFetchEffect from '../hooks/useFetchEffect';
@@ -38,13 +39,14 @@ export default function Watchlist() {
   }
 
   return (
-    <Container p={3} maxW="80em">
+    <Container p={3} maxW="80em" maxH="200em">
+      <Heading  textAlign="center" mt={3} p={6}>
+      Watchlist
+    </Heading >
       <SimpleGrid minChildWidth={150} spacing={3}>
         {movies.map(movie => (
-          <Box as={Link} to={`/movies/${movie.id}`} key={movie.id} pos="relative" noOfLines={2}>
-            <Badge variant="solid" colorScheme="teal" pos="absolute" top={1} right={1}>
-              {movie.vote_average}
-            </Badge>
+          <Box as={Link} to={`/movies/${movie.id}`} key={movie.id} maxW="300px" noOfLines={2}>
+            
             <Tooltip label={movie.title}>
               <Image
                 src={getImage(movie.poster_path, 'w300')}
@@ -52,7 +54,12 @@ export default function Watchlist() {
                 fallbackSrc={imageFallback}
               />
             </Tooltip>
-            <Text>{movie.title}</Text>
+            <Text pos="relative">
+              {movie.title}
+              <Badge variant="solid" colorScheme="teal" pos="absolute" top={-6} right={1}>
+                {movie.vote_average}/10
+              </Badge>
+            </Text>
           </Box>
         ))}
       </SimpleGrid>
