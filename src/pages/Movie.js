@@ -123,7 +123,7 @@ export default function Movie() {
                 <Text>{movie.watchedDate==="removed" || !movie.watchedDate ? "" : `Watched on ${movie.watchedDate}`}</Text>                
               </ListItem>
               <ListItem>
-                <Text paddingBottom="5px" visibility = {movie.watchedDate==="removed" || !movie.watchedDate ? "hidden" : "visible"}> Watched date not correct? Choose correct Date from here: 
+                <Text paddingBottom="5px" visibility = {movie.watchedDate==="removed" || !movie.watchedDate ? "hidden" : "visible"}> Watched date not correct? Choose correct Date from here:  
                   <DatePicker
                   onChange={setWatchedDateManually}
                   value={chosenWatchedDate}
