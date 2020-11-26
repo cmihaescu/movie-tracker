@@ -60,7 +60,7 @@ export default function History() {
             </Badge>
           </Text>
         </Box>
-      )).sort(movies.watchedDate)}
+      )).sort(movies.release_date)}
     </SimpleGrid>
   </Container>
   );
