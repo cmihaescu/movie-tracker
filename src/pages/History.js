@@ -44,7 +44,7 @@ export default function History() {
       Here are the movies you have watched so far
     </Heading >
     <SimpleGrid minChildWidth={150} spacing={3}>
-      {movies.map(movie => (
+      {movies.sort((a, b) => new Date(b.watchedDate) - new Date (a.watchedDate) ).map(movie => (
         <Box as={Link} to={`/movies/${movie.id}`} key={movie.id} noOfLines={2} maxW="300px">
           <Tooltip label={movie.title}>
             <Image               
@@ -60,7 +60,7 @@ export default function History() {
             </Badge>
           </Text>
         </Box>
-      )).sort(movies.release_date)}
+      ))}
     </SimpleGrid>
   </Container>
   );

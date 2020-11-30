@@ -27,19 +27,21 @@ import AddToHistoryButton from '../components/AddToHistoryButton';
 export default function Movie() {
   const { movieId } = useParams();
   const history = useHistory();
-  const [chosenWatchedDate, setWatchedDateManually] = React.useState(new Date());
+  const [chosenWatchedDate, setWatchedDateManually] = React.useState(null);
   const { movie, status, error, updateStatus, updateMovie, updateWatchedMovie, updateWatchedStatus } = useMovie(movieId);
 
   React.useEffect(() => {
-    updateDate();
+    chosenWatchedDate!==null  &&  addDate();
   }, [chosenWatchedDate]);
 
-   const updateDate  =  ()   => {
+   const addDate  =  ()   => {
     updateWatchedMovie({
       ...movie,
        watchedDate: chosenWatchedDate.toLocaleDateString()
-    })
+      })
   }
+
+    
 
   if (status === STATUS.IDLE) {
     return null;
@@ -100,7 +102,7 @@ export default function Movie() {
           <Box>
             <List spacing={3}>
               <ListItem paddingTop="5px">
-                <Text as="span" color="GrayText">Genre: {movie.genres.map(a => a.name + " | ")} Rating {movie.vote_average}/10</Text>
+                <Text as="span" color="GrayText">Genre: {movie.genres? movie.genres.map(a => a.name + " | "): ""} Rating {movie.vote_average}/10</Text>
 
               </ListItem>
               <ListItem>
