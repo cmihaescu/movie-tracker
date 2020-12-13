@@ -16,9 +16,11 @@ module.exports = { client };
 
 client
   .connect()
-  .then(() => console.log('MongoDB Connected'))
+  .then(() => console.log('MongoDB Connected to MongoDB'))
   .catch(error => console.error('Error on connecting to MongoDB server', error))
   .then(() => {
     const movies = client.db(CONFIG.DB).collection('movies');
+    const profiles = client.db(CONFIG.DB).collection('profiles');
+    module.exports.profiles = profiles;
     module.exports.movies = movies;
   });

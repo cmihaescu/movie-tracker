@@ -5,6 +5,8 @@ import Header from './Header';
 import Home from '../pages/Home';
 import Search from '../pages/Search';
 import Movie from '../pages/Movie';
+import Profile from '../pages/Profile';
+import Profiles from '../pages/Profiles';
 import Watchlist from '../pages/Watchlist';
 import History from '../pages/History';
 import Recommendations from '../pages/Recommendations';
@@ -32,6 +34,12 @@ export default function App() {
           </Route>
           <Route path="/recommendations" exact>
             <Recommendations />
+          </Route>
+          <Route path="/profile" exact>
+            <Profiles />
+          </Route>
+          <Route path="/profile/:slug" >
+            <Profile />
           </Route>
           <Route path="/">
             <Home />

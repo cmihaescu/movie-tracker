@@ -43,9 +43,10 @@ export default function Header() {
             alignItems="center"
             flexGrow={1}
           >
-            <MenuItem to="/search">Search</MenuItem>
+            <MenuItem to="/profile">My Profile</MenuItem>
             <MenuItem to="/watchlist">Watchlist</MenuItem>
             <MenuItem to="/history">History</MenuItem>
+            <MenuItem to="/search">Search</MenuItem>
           </Box>
 
           <Box display={{ base: show ? 'block' : 'none', sm: 'block' }} mt={{ base: 4, sm: 0 }}>
